@@ -46,9 +46,9 @@ import org.apache.calcite.util.Sources;
 public class Calcilte {
 
   public static void main(String[] args)throws ClassNotFoundException {  
-   // getConexaoCalcite(); 
+   getConexaoCalcite(); 
     
-    testPrepared();
+     //testPrepared();
    }
 
 //Método Construtor da Classe// 
@@ -112,7 +112,7 @@ public static Connection getConexaoCalcite() {
              //Statement statement = connection.createStatement();
              // ResultSet resultSet = statement.executeQuery(sql);
          
-            ResultSet resultSet =  connection.getMetaData().getTables(null, null, "CAR", null);
+            ResultSet resultSet =  connection.getMetaData().getTables(null, null, null, null);
             
             ResultSet res  =connection.getMetaData().getColumns(null, null, "CAR", "NOME");
             res.next();
@@ -139,6 +139,19 @@ public static Connection getConexaoCalcite() {
     private static void output(ResultSet resultSet) throws SQLException { 
         final ResultSetMetaData metaData = resultSet.getMetaData();
         final int columnCount = metaData.getColumnCount();
+        
+        int j=1;
+        while( j<=columnCount){
+        String columnName = metaData.getColumnName(j);
+        System.out.print(columnName+" ");
+        j++;
+        }
+        
+         System.out.println("");
+                
+        
+          
+        
         while (resultSet.next()) {
           for (int i = 1;; i++) {
           

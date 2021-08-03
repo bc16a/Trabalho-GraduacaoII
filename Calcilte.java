@@ -41,14 +41,15 @@ import org.hamcrest.Description;
 import org.junit.Assert;
 
 import org.apache.calcite.util.Sources;
+
 //import org.junit.jupiter.api.Test;
 
 public class Calcilte {
 
   public static void main(String[] args)throws ClassNotFoundException {  
-   getConexaoCalcite(); 
-    
-     //testPrepared();
+    //getConexaoCalcite(); 
+    novo();
+    //testPrepared();
    }
 
 //Método Construtor da Classe// 
@@ -147,11 +148,8 @@ public static Connection getConexaoCalcite() {
         j++;
         }
         
-         System.out.println("");
-                
-        
-          
-        
+         System.out.println ("");
+       
         while (resultSet.next()) {
           for (int i = 1;; i++) {
           
@@ -169,6 +167,7 @@ public static Connection getConexaoCalcite() {
   
   
   static void testPrepared(){
+    
     final Properties properties = new Properties();
     properties.setProperty("caseSensitive", "true");
     try (Connection connection =
@@ -182,18 +181,22 @@ public static Connection getConexaoCalcite() {
                   ImmutableMap.of("directory",
                       resourcePath("sales"), "flavor", "scannable"));
       calciteConnection.getRootSchema().add("TEST", schema);
+    
       
-      
-      final String sql = "select * from \"TEST\".\"DEPTS\" where \"NAME\" = ?";
-      final PreparedStatement statement2 =
-          calciteConnection.prepareStatement(sql);
+       String sql = "SELECT * FROM TEST.DEPTS";
+      //final PreparedStatement statement2 = calciteConnection.prepareStatement(sql);
 
-      statement2.setString(1, "Sales");
-      final ResultSet resultSet1 = statement2.executeQuery();
+     // statement2.setString(1, "Sales");
+      //final ResultSet resultSet1 = statement2.executeQuery();
+
+         Statement statement = calciteConnection.createStatement();
+         ResultSet resultSet = statement.executeQuery(sql);
+
+         //ResultSet resultSet =  calciteConnection.getMetaData().getTables(null, null, null, null);
+         output(resultSet);
    
     }catch (Exception e) {
-          System.out.println("Something went wrong.  deu ruim "+ e.getMessage());
-    
+          System.out.println("Something went wrong.  deu ruim "+ e.getMessage()); 
         }
   }
 
@@ -201,12 +204,29 @@ public static Connection getConexaoCalcite() {
     return Sources.of(Calcilte.class.getResource("/" + path)).file().getAbsolutePath();
   }
 
+  static void novo(){
+
+    try {
+    Properties info = new Properties();
+info.setProperty("lex", "JAVA");
+Connection connection = DriverManager.getConnection(
+		"jdbc:calcite:model=model.json", info);
+
+Statement statement = connection.createStatement();
+String sql = "SELECT * FROM SALES.DEPTS";
+ResultSet resultSet = statement.executeQuery(sql);
+
+}catch (Exception e) {
+  System.out.println("Something went wrong.  deu ruim "+ e.getMessage()); 
+}
+  }
+
  
 }
 /*
 javac -classpath .:calcite-core-1.27.0.jar:calcite-csv-1.27.0.jar:commons-dbcp2-2.4.0.jar:calcite-linq4j-1.27.0.jar:mysql-connector-java-8.0.25.jar:avatica-core-1.18.0.jar:protobuf-java-3.17.3.jar:guava-19.0.jar:commons-pool2-2.6.1.jar:commons-logging-1.1.3.jar:slf4j-api-1.7.2.jar:slf4j-simple-1.7.2.jar:json-path-2.2.0.jar:jackson-core-2.10.0.jar:esri-geometry-api-2.2.0.jar:failureaccess-1.0.1.jar:jackson-databind-2.10.0.jar:jackson-dataformat-yaml-2.10.0.jar:jackson-annotations-2.10.0.jar:calcite-server-1.27.0.jar:junit-4.9.jar:hamcrest-all-1.3.jar:checker-3.15.0.jar:commons-compiler-3.0.8.jar:calcite-example-csv-1.14.0.jar:checker-util-3.15.0.jar:checker-qual-3.15.0.jar:calcite-file-1.27.0.jar:opencsv-2.3.jar:commons-lang3-3.8.jar Calcilte.java -Xlint
 
-java -classpath .:calcite-core-1.27.0.jar:calcite-csv-1.27.0.jar:commons-dbcp2-2.4.0.jar:calcite-linq4j-1.27.0.jar:mysql-connector-java-8.0.25.jar:avatica-core-1.18.0.jar:protobuf-java-3.17.3.jar:guava-19.0.jar:commons-pool2-2.6.1.jar:commons-logging-1.1.3.jar:slf4j-api-1.7.2.jar:slf4j-simple-1.7.2.jar:json-path-2.2.0.jar:jackson-core-2.10.0.jar:esri-geometry-api-2.2.0.jar:failureaccess-1.0.1.jar:jackson-databind-2.10.0.jar:jackson-dataformat-yaml-2.10.0.jar:jackson-annotations-2.10.0.jar:calcite-server-1.27.0.jar:junit-4.9.jar:hamcrest-all-1.3.jar:checker-3.15.0.jar:calcite-example-csv-1.14.0.jar:checker-util-3.15.0.jar:checker-qual-3.15.0.jar:calcite-file-1.27.0.jar:opencsv-2.3.jar:commons-lang3-3.8.jar:commons-compiler-3.1.4.jar:commons-compiler-jdk-3.1.4.jar Calcilte -Xlint
+javac -classpath .:calcite-core-1.27.0.jar:calcite-csv-1.27.0.jar:commons-dbcp2-2.4.0.jar:calcite-linq4j-1.27.0.jar:mysql-connector-java-8.0.25.jar:avatica-core-1.18.0.jar:protobuf-java-3.17.3.jar:guava-19.0.jar:commons-pool2-2.6.1.jar:commons-logging-1.1.3.jar:slf4j-api-1.7.2.jar:slf4j-simple-1.7.2.jar:json-path-2.2.0.jar:jackson-core-2.10.0.jar:esri-geometry-api-2.2.0.jar:failureaccess-1.0.1.jar:jackson-databind-2.10.0.jar:jackson-dataformat-yaml-2.10.0.jar:jackson-annotations-2.10.0.jar:calcite-server-1.27.0.jar:junit-4.9.jar:hamcrest-all-1.3.jar:checker-3.15.0.jar:calcite-example-csv-1.14.0.jar:checker-util-3.15.0.jar:checker-qual-3.15.0.jar:calcite-file-1.27.0.jar:opencsv-2.3.jar:commons-lang3-3.8.jar:commons-compiler-3.1.4.jar:commons-compiler-jdk-3.1.4.jar CsvTest.java -Xlint
 */
 
 
